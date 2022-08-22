@@ -9,26 +9,23 @@ from pymongo import errors
 fake = Faker('ru_RU')
 actions_types = ['read', 'create', 'update', 'delete']
 
-client = MongoClient('localhost', 27017)
 
-db = client.task1_db
-accounts = db.account
-
-
-def create_user_accounts(number_of_users=10):
+def create_user_accounts(accounts, number_of_users=10):
+    user_accounts = []
     for i in range(number_of_users):
         user_name = fake.name()
-        user_account = {
+        user = {
             'number': f'{7800000000001 + i}',
             'name': user_name,
             'sessions': []
         }
-        create_sessions(user_account)
+        create_sessions(user)
+        user_accounts.append(user)
 
-        try:
-            accounts.insert_one(user_account).inserted_id
-        except (errors.WriteError, errors.WriteConcernError) as e:
-            print(e)
+    try:
+        accounts.insert_many(user_accounts)
+    except (errors.WriteError, errors.WriteConcernError) as e:
+        print(e)
 
 
 def create_sessions(user):
@@ -58,4 +55,7 @@ def create_actions_for_session(session, created_at):
 
 
 if __name__ == '__main__':
-    create_user_accounts()
+    client = MongoClient('localhost', 27017)
+    db = client.task1_db
+    accounts = db.account
+    create_user_accounts(accounts)

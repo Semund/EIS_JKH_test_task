@@ -1,7 +1,6 @@
-import json
-from pprint import pprint
-
 from pymongo import MongoClient
+
+from write_json import write_to_json_file
 
 
 def collect_all_user_statistic(accounts):
@@ -44,20 +43,10 @@ def parsing_user_session(session, user_actions):
         user_actions[current_session_action['type']] = user_actions_info
 
 
-def write_to_json_file(all_users_statistic):
-    with open('user_statistics.json', 'w', encoding='utf-8') as json_file:
-        json.dump(
-            all_users_statistic,
-            json_file,
-            indent=4,
-            default=lambda x: x.strftime('%Y-%m-%d %H:%M')
-        )
-
-
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)
     db = client.task1_db
     accounts = db.account
 
     all_users_statistic = collect_all_user_statistic(accounts)
-    write_to_json_file(all_users_statistic)
+    write_to_json_file(all_users_statistic, 'user_statistics')

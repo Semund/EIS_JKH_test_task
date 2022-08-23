@@ -4,6 +4,7 @@ from write_json import write_to_json_file
 
 
 def clear_information(pay):
+    """Формируем поля объектов оплаты для итоговой таблицы соответствий"""
     return {
         'id': pay['id'],
         'date': pay['date']
@@ -11,6 +12,14 @@ def clear_information(pay):
 
 
 def get_verified_payments(payments_collection, accruals_collection):
+    """
+    verified_payments: итоговая таблица соответствий платежей и задолжностей,
+    closed_accruals: множество ID задолжностей, которые уже привязаны к оплате
+
+    Для каждого платежа функция ищет подходящую задолжность. В зависимости от
+    результатов поиска платеж записывается либо в 'confirmed_payments', либо
+    в 'unused_payments'.
+    """
     verified_payments = {
         'confirmed_payments': [],
         'unused_payments': []
@@ -18,7 +27,7 @@ def get_verified_payments(payments_collection, accruals_collection):
     closed_accruals = set()
 
     for payment in payments_collection.find().sort('date', 1):
-        accrual = find_accrual_to_payment(payment, accruals_collection, closed_accruals)
+        accrual = get_accrual_to_payment(payment, accruals_collection, closed_accruals)
         if accrual:
             verified_payments['confirmed_payments'].append(
                 {
@@ -34,7 +43,12 @@ def get_verified_payments(payments_collection, accruals_collection):
     return verified_payments
 
 
-def find_accrual_to_payment(payment, accruals_collection, closed_accruals):
+def get_accrual_to_payment(payment, accruals_collection, closed_accruals):
+    """
+    Вызывает функцию подбора задолжности с разными фильтрами поиска.
+    Первоначально ищется подоходящая задолжность такого же месяца, что и оплата.
+    Затем ищется самая старая подходящая задолжность.
+    """
     accrual_same_month = parsing_accrual_collection(
         accruals_collection,
         closed_accruals,
@@ -55,6 +69,7 @@ def find_accrual_to_payment(payment, accruals_collection, closed_accruals):
 
 
 def parsing_accrual_collection(accruals_collection, closed_accruals, search_filter):
+    """Поиск задолжности в коллекции задолжностей по заданному фильтру"""
     for accrual in accruals_collection.find(search_filter).sort('date', 1):
         if accrual and accrual['id'] not in closed_accruals:
             closed_accruals.add(accrual['id'])

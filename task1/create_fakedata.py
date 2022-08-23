@@ -11,6 +11,9 @@ actions_types = ['read', 'create', 'update', 'delete']
 
 
 def create_user_accounts(user_accounts_collection, number_of_users=10):
+    """
+    Создание данных для пользователя и коллекции всех пользователей
+    """
     user_accounts = []
     for i in range(number_of_users):
         user_name = fake.name()
@@ -29,6 +32,9 @@ def create_user_accounts(user_accounts_collection, number_of_users=10):
 
 
 def create_sessions(user):
+    """
+    Создание данных сессии для каждого пользователя
+    """
     for j in range(5):
         session_created_at = fake.date_time()
         session_hash = hashlib.sha256(
@@ -47,6 +53,9 @@ def create_sessions(user):
 
 
 def create_actions_for_session(session, created_at):
+    """
+    Создание данных для действий пользователя в каждой сессии
+    """
     for _ in range(6):
         action = {
             'type': random.choice(actions_types),

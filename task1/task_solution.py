@@ -4,6 +4,9 @@ from write_json import write_to_json_file
 
 
 def collect_all_user_statistic(accounts):
+    """
+    Формируем общую таблицу со статистикой всех пользователей
+    """
     all_users_statistic = []
     for current_user in accounts.find():
         current_user_statistic = collect_current_user_statistic(current_user)
@@ -12,6 +15,9 @@ def collect_all_user_statistic(accounts):
 
 
 def collect_current_user_statistic(user):
+    """
+    Формируем данные действий пользователя для общей таблицы
+    """
     user_actions_info = {}
     for session in user['sessions']:
         parsing_user_session(session, user_actions_info)
@@ -33,6 +39,9 @@ def collect_current_user_statistic(user):
 
 
 def parsing_user_session(session, user_actions):
+    """
+    Собираем статистику действий пользователя во время сессии
+    """
     for current_session_action in session['actions']:
         user_actions_info = user_actions.get(current_session_action['type'], [0, None])
 

@@ -4,7 +4,7 @@ import random
 from pymongo import MongoClient, errors
 
 
-def create_finance_data(finance_collection):
+def create_finance_fakedata(finance_collection):
     finance_data = []
     year = 2021
     id = 1
@@ -32,5 +32,5 @@ if __name__ == '__main__':
     accrual_collection = db.accrual
     payment_collection = db.payment
 
-    create_finance_data(accrual_collection)
-    create_finance_data(payment_collection)
+    create_finance_fakedata(accrual_collection)
+    create_finance_fakedata(payment_collection)

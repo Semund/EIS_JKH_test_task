@@ -2,3 +2,4 @@
 venv
 .idea
 __pycache__
+/task1/user_statistics.json

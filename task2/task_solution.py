@@ -38,7 +38,7 @@ def find_accrual_to_payment(payment, accruals_collection, closed_accruals):
     accrual_same_month = parsing_accrual_collection(
         accruals_collection,
         closed_accruals,
-        filter={'date': {'$lt': payment['date']}, 'month': payment['month']})
+        search_filter={'date': {'$lt': payment['date']}, 'month': payment['month']})
 
     if accrual_same_month:
         return accrual_same_month
@@ -46,7 +46,7 @@ def find_accrual_to_payment(payment, accruals_collection, closed_accruals):
     accrual_most_older = parsing_accrual_collection(
         accruals_collection,
         closed_accruals,
-        filter={'date': {'$lt': payment['date']}})
+        search_filter={'date': {'$lt': payment['date']}})
 
     if accrual_most_older:
         return accrual_most_older
@@ -54,8 +54,8 @@ def find_accrual_to_payment(payment, accruals_collection, closed_accruals):
     return None
 
 
-def parsing_accrual_collection(accruals_collection, closed_accruals, filter):
-    for accrual in accruals_collection.find(filter).sort('date', 1):
+def parsing_accrual_collection(accruals_collection, closed_accruals, search_filter):
+    for accrual in accruals_collection.find(search_filter).sort('date', 1):
         if accrual and accrual['id'] not in closed_accruals:
             closed_accruals.add(accrual['id'])
             return accrual

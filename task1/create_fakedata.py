@@ -10,7 +10,7 @@ fake = Faker('ru_RU')
 actions_types = ['read', 'create', 'update', 'delete']
 
 
-def create_user_accounts(accounts, number_of_users=10):
+def create_user_accounts(user_accounts_collection, number_of_users=10):
     user_accounts = []
     for i in range(number_of_users):
         user_name = fake.name()
@@ -23,7 +23,7 @@ def create_user_accounts(accounts, number_of_users=10):
         user_accounts.append(user)
 
     try:
-        accounts.insert_many(user_accounts)
+        user_accounts_collection.insert_many(user_accounts)
     except (errors.WriteError, errors.WriteConcernError) as e:
         print(e)
 
@@ -31,9 +31,13 @@ def create_user_accounts(accounts, number_of_users=10):
 def create_sessions(user):
     for j in range(5):
         session_created_at = fake.date_time()
+        session_hash = hashlib.sha256(
+            session_created_at.strftime('%Y-%m-%d %H:%M').encode('utf-8')
+        ).hexdigest()
+
         session = {
             'created_at': session_created_at,
-            'session_id': hashlib.sha256((user['name'] + str(j)).encode('utf-8')).hexdigest(),
+            'session_id': session_hash,
             'actions': []
         }
 
@@ -57,5 +61,6 @@ def create_actions_for_session(session, created_at):
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)
     db = client.task1_db
-    accounts = db.account
-    create_user_accounts(accounts)
+    user_accounts_collection = db.account
+
+    create_user_accounts(user_accounts_collection)

@@ -3,3 +3,4 @@ venv
 .idea
 __pycache__
 /task1/user_statistics.json
+/task2/verified_payments.json

@@ -27,7 +27,7 @@ def create_finance_fakedata(finance_collection):
 
 
 if __name__ == '__main__':
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('mongodb://root:example@mongo_db:27017/')
     db = client.task2_db
     accrual_collection = db.accrual
     payment_collection = db.payment

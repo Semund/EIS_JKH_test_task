@@ -68,7 +68,7 @@ def create_actions_for_session(session, created_at):
 
 
 if __name__ == '__main__':
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('mongodb://root:example@mongo_db:27017/')
     db = client.task1_db
     user_accounts_collection = db.account
 

@@ -2,5 +2,6 @@
 venv
 .idea
 __pycache__
-/task1/user_statistics.json
-/task2/verified_payments.json
+mongodb
+solution/user_statistics.json
+solution/verified_payments.json

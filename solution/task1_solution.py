@@ -53,7 +53,7 @@ def parsing_user_session(session, user_actions):
 
 
 if __name__ == '__main__':
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('mongodb://root:example@127.0.0.1:27017/')
     db = client.task1_db
     accounts = db.account
 

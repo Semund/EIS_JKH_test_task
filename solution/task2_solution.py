@@ -78,7 +78,7 @@ def parsing_accrual_collection(accruals_collection, closed_accruals, search_filt
 
 
 if __name__ == '__main__':
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('mongodb://root:example@127.0.0.1:27017/')
     db = client.task2_db
     accrual_collection = db.accrual
     payment_collection = db.payment
